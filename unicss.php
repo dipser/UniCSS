@@ -16,32 +16,32 @@ function css_unify($file, $newfile, $minify=TRUE, $make=NULL)
 			$css = preg_replace("/\/\*(.*)?\*\//Usi", '', $css); // Remove Comments: /* */
 		}
 		
-		// Variablen einlesen: $var:value;
+		// Read variables: $var:value;
 		global $variables; // Variablen-Array
 		$css = preg_replace_callback('/(\$[a-zA-Z0-9_-]+)\s*:(.+);+[\s*]/Usi', create_function('$hit', 'global $variables;$variables[] = array(trim($hit[1]), trim($hit[2]));return "";'), $css, -1, $count);
 
 		// Replace variables with value
 		arsort($variables);
 		foreach ($variables as $key => $val) {
-			$css = preg_replace("/\\".$val[0].'/', $val[1], $css);
+			$css = str_replace($val[0], $val[1], $css);
 		}
 		$css = trim($css);
 		
 		
-		// Funktionen: @opacity:0.5; wird zu opacity:0.5;-moz-opacity:0.5;...
+		// Function: @opacity:0.5; wird zu opacity:0.5;-moz-opacity:0.5;...
 		$css = preg_replace_callback('/@opacity\s*:(.+);/Usi', create_function('$hit', 'return "-moz-opacity:$hit[1];-khtml-opacity:$hit[1];-ms-filter:\"alpha(opacity=".($hit[1]*100).")\";filter:alpha(opacity=".($hit[1]*100).");opacity:$hit[1];";'), $css);
-		// Funktionen: @box-shadow
+		// Function: @box-shadow
 		$css = preg_replace_callback('/@box-shadow\s*:(.+);/Usi', create_function('$hit', 'return "-moz-box-shadow:$hit[1];-webkit-box-shadow:$hit[1];box-shadow:$hit[1];";'), $css);
-		// Funktionen: @border-radius
+		// Function: @border-radius
 		$css = preg_replace_callback('/@border-radius\s*:(.+);/Usi', create_function('$hit', 'return "-moz-border-radius:$hit[1];-webkit-border-radius:$hit[1];border-radius:$hit[1];";'), $css);
-		// Funktionen: @transition: all 0.3s ease-out;
+		// Function: @transition: all 0.3s ease-out;
 		$css = preg_replace_callback('/@transition\s*:(.+);/Usi', create_function('$hit', 'return "-webkit-transition:$hit[1];-moz-transition:$hit[1];-o-transition:$hit[1];";'), $css);
-		// Funktionen: @transform: scale(1.05);
+		// Function: @transform: scale(1.05);
 		$css = preg_replace_callback('/@transform\s*:(.+);/Usi', create_function('$hit', 'return "-webkit-transform:$hit[1];-moz-transform:$hit[1];transform:$hit[1];";'), $css);
-		// Funktionen: @box-sizing:content-box;
+		// Function: @box-sizing:content-box;
 		$css = preg_replace_callback('/@box-sizing\s*:(.+);/Usi', create_function('$hit', 'return "-webkit-box-sizing:$hit[1];-moz-box-sizing:$hit[1];-ms-box-sizing:$hit[1];box-sizing:$hit[1];";'), $css);
 		
-		// Funktionen: @box-rotate:rotate(7,5deg);
+		// Function: @box-rotate:rotate(7,5deg);
 		//$css = preg_replace_callback('/@box-rotate\s*:(.+);/Usi', create_function('$hit', 'return "-webkit-box-sizing:$hit[1];-moz-box-sizing:$hit[1];-ms-box-sizing:$hit[1];box-sizing:$hit[1];";'), $css);
 		
 		// Funktionen: @rgba();
