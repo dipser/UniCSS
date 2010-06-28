@@ -1,5 +1,6 @@
 <?php
 
+// UniCSS with Minifying
 function css_unify($file, $newfile, $minify=TRUE, $make=NULL)
 {
 	// $file-Datumstempel neuer als $newfile-Datumstempel
@@ -12,7 +13,7 @@ function css_unify($file, $newfile, $minify=TRUE, $make=NULL)
 		// Generate normal CSS from UniCSS
 		$css = trim($unicss);
 		if($minify) {
-			$css = preg_replace("/\/\*(.*)?\*\//Usi", '', $css); // Kommentare entfernen: /* */
+			$css = preg_replace("/\/\*(.*)?\*\//Usi", '', $css); // Remove Comments: /* */
 		}
 		
 		// Variablen einlesen: $var:value;
