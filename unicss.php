@@ -36,7 +36,9 @@ function css_unify($file, $newfile, $minify=TRUE, $make=NULL)
 		$css = preg_replace_callback('/@border-radius\s*:(.+);/Usi', create_function('$hit', 'return "-moz-border-radius:$hit[1];-webkit-border-radius:$hit[1];border-radius:$hit[1];";'), $css);
 		// Function: @transition: all 0.3s ease-out;
 		$css = preg_replace_callback('/@transition\s*:(.+);/Usi', create_function('$hit', 'return "-webkit-transition:$hit[1];-moz-transition:$hit[1];-o-transition:$hit[1];";'), $css);
-		// Function: @transform: scale(1.05);
+		// Function: @transform:rotate(7.5deg);
+		$css = preg_replace_callback('/@transform\s*:\s*rotate\((.+)\)\s*;/Usi', create_function('$hit', '$h=$hit[1];$deg = (float) $h;$m21 = $h*M_PI/180;echo $m22=cos($m21);$ie6ie7 = "progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=$m22, M12=-$m21, M21=$m21, M22=$m22)";$ie8 = "\\"progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=$m22, M12=-$m21, M21=$m21, M22=$m22)\\"";return "-webkit-transform:rotate($hit[1]);-moz-transform:rotate($hit[1]);transform:rotate($hit[1]);filter:$ie6ie7;-ms-filter:$ie8;zoom:1;";'), $css);
+		// Function: @transform: * ;    * could be scale(1.05)
 		$css = preg_replace_callback('/@transform\s*:(.+);/Usi', create_function('$hit', 'return "-webkit-transform:$hit[1];-moz-transform:$hit[1];transform:$hit[1];";'), $css);
 		// Function: @box-sizing:content-box;
 		$css = preg_replace_callback('/@box-sizing\s*:(.+);/Usi', create_function('$hit', 'return "-webkit-box-sizing:$hit[1];-moz-box-sizing:$hit[1];-ms-box-sizing:$hit[1];box-sizing:$hit[1];";'), $css);
