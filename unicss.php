@@ -64,6 +64,9 @@ function css_unify($file, $newfile, $minify=TRUE, $make=NULL)
 		$css = preg_replace_callback('/@base64\((.+)\)/Usi', create_function('$hit', 'global $mimetype;return "data:".$mimetype($hit[1]).";base64,".base64_encode(implode("", file($hit[1])))."";'), $css);
 $inputfile = 'aurel-manga.png';
 
+		// Function: @math()
+		$css = preg_replace_callback('/@math\((.+)\)/Usi', create_function('$hit', '$m=$hit[1];$m=str_replace("[", "(", str_replace("]", ")", $m));eval("\$m = $m;");return $m;'), $css); // Perhaps with a whitlist with all math functions!?
+
 
 		// Minify
 		if($minify)
