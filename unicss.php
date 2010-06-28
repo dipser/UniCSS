@@ -20,9 +20,10 @@ function css_unify($file, $newfile, $minify=TRUE, $make=NULL)
 		global $variables; // Variablen-Array
 		$css = preg_replace_callback('/(\$[a-zA-Z0-9_-]+)\s*:(.+);+[\s*]/Usi', create_function('$hit', 'global $variables;$variables[] = array(trim($hit[1]), trim($hit[2]));return "";'), $css, -1, $count);
 
-		// Variablen ersetzen
-		for($i=0; $i<$count; $i++) {
-			$css = preg_replace("/\\".$variables[$i][0].'/', $variables[$i][1], $css);
+		// Replace variables with value
+		arsort($variables);
+		foreach ($variables as $key => $val) {
+			$css = preg_replace("/\\".$val[0].'/', $val[1], $css);
 		}
 		$css = trim($css);
 		
