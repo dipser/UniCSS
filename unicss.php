@@ -1,12 +1,12 @@
 <?php
 
 // UniCSS with Minifying
-function css_unify($file, $newfile, $minify=TRUE, $make=NULL)
+function css_unify($file, $newfile, $minify=TRUE, $force=FALSE)
 {
-	// $file-Datumstempel neuer als $newfile-Datumstempel
-	// ODER $newfile-Datei existiert nicht
-	// ODER $make==TRUE, d.h. es wird eine neue Generierung erzwungen
-	if((filemtime($file)>filemtime($newfile) || !file_exists($newfile)) || $make==TRUE)
+	// $file-Changedate newer than $newfile
+	// OR $newfile does not exist
+	// OR $make!=TRUE, d.h. es wird eine neue Generierung erzwungen
+	if( $force || !file_exists($newfile) || filemtime($file)>filemtime($newfile) )
 	{
 		$unicss = file_get_contents($file);
 		
