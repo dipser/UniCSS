@@ -18,15 +18,13 @@ function css_unify($file, $newfile, $minify=TRUE, $make=NULL)
 		
 		// Read variables: $var:value;
 		global $variables; // Variablen-Array
-		$css = preg_replace_callback('/(\$[a-zA-Z0-9_-]+)\s*:(.+);+[\s*]/Usi', create_function('$hit', 'global $variables;$variables[] = array(trim($hit[1]), trim($hit[2]));return "";'), $css, -1, $count);
+		$css = preg_replace_callback('/(\$[a-zA-Z0-9_-]+)\s*:(.+);+[\s*]/Usi', create_function('$hit', 'global $variables;$variables[trim($hit[1])] = trim($hit[2]);return "";'), $css, -1, $count);
 
 		// Replace variables with value
-		arsort($variables);
-		//for($i=0; $i<$count; $i++) {
-			foreach ($variables as $key => $val) {
-			//$css = preg_replace("/\\".$variables[$i][0].'/', $variables[$i][1], $css);
-			//$css = preg_replace("/\\".$val[0].'/', $val[1], $css);
-			$css = str_replace($val[0], $val[1], $css);
+		ksort($variables);
+		$variables = array_reverse($variables, true);
+		foreach ($variables as $key => $val) {
+			$css = str_replace($key, $val, $css);
 		}
 		$css = trim($css);
 		
